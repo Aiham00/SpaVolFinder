@@ -1,6 +1,8 @@
 async function loadApplicationsPage() {
   const token = JSON.parse(window.localStorage.getItem("token"))
-
+  if (!token){
+    showPage("/entry/login")
+  }else{
   const response = await fetch('http://localhost:3000/api/applications',{
     headers: {"Content-Type": "application/json",
               "Authorization": "Bearer "+token
@@ -123,5 +125,5 @@ async function loadApplicationsPage() {
       p.innerText=error
       bodyDiv.appendChild(p)
     })
-    
+  }   
 }

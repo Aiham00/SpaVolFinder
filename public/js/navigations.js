@@ -152,11 +152,19 @@ function handleAnchorOnClick(anchor,url){
   }
  function isOrganizationLoggedin(){
     const token = JSON.parse(window.localStorage.getItem("token"))
-    return decode(token).includes("isOrg")
+    if(token){
+        return decode(token).includes("isOrg")
+    }else{
+        return false
+    }
  }
  function isVolunteerLoggedin(){
     const token = JSON.parse(window.localStorage.getItem("token"))
-    return decode(token).includes("isVolunteer")
+    if (token){
+        return decode(token).includes("isVolunteer")
+    }else{
+        return false
+    }
  }
 const decode = token =>
 decodeURIComponent(atob(token.split('.')[1].replace('-', '+').replace('_', '/')).split('').map(c =>
