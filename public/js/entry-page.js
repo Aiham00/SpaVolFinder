@@ -1,0 +1,420 @@
+
+function loadEntry() {
+    const bodyDiv = document.querySelector('.container#entry-page')
+    bodyDiv.innerHTML=""
+    const loginCardDiv = document.createElement("div")
+    
+    const divHeader = document.createElement("h3")
+    divHeader.innerText = "VolFinder"
+    loginCardDiv.appendChild(divHeader)
+
+    const leadDiv = document.createElement("div")
+    leadDiv.innerText = "A way for obtaining a good connection between organisations and volunteers"
+    loginCardDiv.appendChild(leadDiv)
+
+    const anchorLogin = document.createElement("a")
+    anchorLogin.innerText = "Login"
+    handleAnchorOnClick(anchorLogin,"/entry/login")
+    loginCardDiv.appendChild(anchorLogin)
+
+    const p = document.createElement("p")
+    p.innerText = "Or"
+    loginCardDiv.appendChild(p)
+
+    const signUpanchor = document.createElement("a")
+    signUpanchor.innerText ="Sign Up!"
+    signUpanchor.classList.add("dropdown-trigger")
+    signUpanchor.setAttribute("data-target",'dropdown1')
+    loginCardDiv.appendChild(signUpanchor)
+
+    const dropdownList = document.createElement("ul")
+    dropdownList.classList.add("dropdown-content")
+    dropdownList.setAttribute("id", "dropdown1")
+
+    const volunteerSignupLi = document.createElement("li")
+    const volunteerSignupAnchor = document.createElement("a")
+    volunteerSignupAnchor.innerText = "Volunteer"
+    handleAnchorOnClick(volunteerSignupAnchor,"/entry/volunteer-sign-up")
+    volunteerSignupLi.appendChild(volunteerSignupAnchor)
+
+    const organizationSignupLi = document.createElement("li")
+    const organizationSignupAnchor = document.createElement("a")
+    organizationSignupAnchor.innerText = "Organization"
+    handleAnchorOnClick(organizationSignupAnchor,"/entry/organizer-sign-up")
+    organizationSignupLi.appendChild(organizationSignupAnchor)
+
+    dropdownList.appendChild(volunteerSignupLi)
+    dropdownList.appendChild(organizationSignupLi)
+    loginCardDiv.appendChild(dropdownList)
+    bodyDiv.appendChild(loginCardDiv)
+
+    M.Dropdown.init(signUpanchor);
+}
+
+function creatInlineInputDiv(id,name,type,labelText){
+    const div = document.createElement("div")
+    div.classList.add("input-field")
+    div.classList.add("inline")
+
+    const input = document.createElement("input")
+    input.id = id
+    input.type = type
+    input.classList.add("validate")
+    input.name = name
+    div.appendChild(input)
+
+    const label = document.createElement("label")
+    label.setAttribute("for",id)
+    label.innerText = labelText
+    div.appendChild(label)
+
+    const span = document.createElement("span")
+    span.classList.add("helper-text-"+id)
+    span.setAttribute("data-error","wrong")
+    span.setAttribute("data-success","right")
+    span.id = "helper-text"
+    div.appendChild(span)
+    return div
+}
+
+function loadSignupVolunteerPage(){
+    const bodyDiv = document.querySelector('.container#entry-page')
+    bodyDiv.innerHTML=""
+
+    const pageTitle = document.createElement("h3")
+    pageTitle.innerText = "Join Us"
+    bodyDiv.appendChild(pageTitle)
+
+    const div = document.createElement("div")
+    bodyDiv.appendChild(div)
+
+    const inlineDivFirstName = creatInlineInputDiv("first-name","firstName","text","First Name")
+    div.appendChild(inlineDivFirstName)
+
+    const inlineDivLastName = creatInlineInputDiv("last-name","lastName","text","Last Name")
+    div.appendChild(inlineDivLastName)
+
+    const inlineDivMobile = creatInlineInputDiv("mobile_number","mobileNumber","text","Mobile")
+    div.appendChild(inlineDivMobile)
+
+    const inlineDivEmail = creatInlineInputDiv("email","email","email","Email")
+    div.appendChild(inlineDivEmail)
+
+    const inlineDivPassword = creatInlineInputDiv("password","password","password","Password")
+    div.appendChild(inlineDivPassword)
+
+    const inlineDivPasswordRepeat = creatInlineInputDiv("password-repeat","password-repea","password","Password(repeat)")
+    div.appendChild(inlineDivPasswordRepeat)
+
+    const button = document.createElement("button")
+    button.innerText = "Submit"
+    div.appendChild(button)
+    button.addEventListener('click', function(e){
+        e.preventDefault()
+
+        const volunteer = {
+          firstName: inlineDivFirstName.firstChild.value,
+          lastName: inlineDivLastName.firstChild.value,
+          mobileNumber: inlineDivMobile.firstChild.value,
+          email: inlineDivEmail.firstChild.value,
+          password: inlineDivPassword.firstChild.value,
+          passwordRepeat: inlineDivPasswordRepeat.firstChild.value
+          
+        }
+                    
+        signupVolunteer(volunteer)
+        
+        
+      })
+
+}
+
+
+function loadSignupOrganizationPage(){
+  const bodyDiv = document.querySelector('.container#entry-page')
+  bodyDiv.innerHTML=""
+
+  const pageTitle = document.createElement("h3")
+  pageTitle.innerText = "Join Us"
+  bodyDiv.appendChild(pageTitle)
+
+  const div = document.createElement("div")
+  bodyDiv.appendChild(div)
+
+  const inlineDivOrganizationName = creatInlineInputDiv("organisation_name","orgName","text","Org Name")
+  div.appendChild(inlineDivOrganizationName)
+
+  const inlineDivMobile = creatInlineInputDiv("mobile_number","mobile","text","Mobile")
+  div.appendChild(inlineDivMobile)
+
+  const inlineDivEmail = creatInlineInputDiv("email","email","email","Email")
+  div.appendChild(inlineDivEmail)
+
+  const inlineDivPassword = creatInlineInputDiv("password","password","password","Password")
+  div.appendChild(inlineDivPassword)
+
+  const inlineDivPasswordRepeat = creatInlineInputDiv("password-repeat","password-repea","password","Password(repeat)")
+  div.appendChild(inlineDivPasswordRepeat)
+
+  const inlineDivAbout = document.createElement("div")
+  inlineDivAbout.classList.add("input-field")
+  inlineDivAbout.classList.add("col")
+  
+  const textareaAbout = document.createElement("textarea")
+  textareaAbout.id = "aboutOrganisation"
+  textareaAbout.classList.add("materialize-textarea")
+  textareaAbout.name = "aboutOrganisation"
+  inlineDivAbout.appendChild(textareaAbout)
+
+  const label = document.createElement("label")
+  label.setAttribute("for","aboutOrganisation")
+  label.innerText = "Write something about the organisation... (Optional)"
+  textareaAbout.appendChild(label)
+  div.appendChild(inlineDivAbout)
+
+  const button = document.createElement("button")
+  button.innerText = "Submit"
+  div.appendChild(button)
+  button.addEventListener('click', function(e){
+      e.preventDefault()
+
+      const org = {
+        organisationName: inlineDivOrganizationName.firstChild.value,
+        mobileNumber: inlineDivMobile.firstChild.value,
+        email: inlineDivEmail.firstChild.value,
+        password: inlineDivPassword.firstChild.value,
+        passwordRepeat: inlineDivPasswordRepeat.firstChild.value,
+        aboutOrganisation:textareaAbout.value
+        
+      }
+                  
+      signupOrganization(org)
+      
+    })
+
+}
+
+async function loadVolunteerInfoPage(id) {
+    const bodyDiv = document.querySelector('.container#entry-page')
+    bodyDiv.innerHTML=""
+    const errorDiv = document.createElement("div")
+    bodyDiv.appendChild(errorDiv)
+    const response = await fetch('http://localhost:3000/api/entry/'+id)
+    .then (function(response){
+      return response.json()
+        .then(function(account){
+            const div = document-createElement(" div")
+            bodyDiv.appendChild(div)
+        
+            const span = document.createElement("span")
+            span.innerText = "Account Information"
+            div.appendChild(span)
+        
+            const table = document.createElement("table")
+            div.appendChild(table)
+        
+            const tbody = document.createElement("tbody")
+            table.appendChild(tbody)
+        
+            const tr1 = document.createElement("tr")
+            tbody.appendChild(tr1)
+        
+            const td11 = document.createElement("td")
+            td11.innerText = "First name"
+            tr1.appendChild(td11)
+            
+            const td12 = document.createElement("td")
+            td12. innerText = account.firstName
+            tr1.appendChild(td12)
+        
+            const tr2 = document.createElement("tr")
+            tbody.appendChild(tr2)
+        
+            const td21 = document.createElement("td")
+            td21.innerText = "Last name"
+            tr2.appendChild(td21)
+            
+            const td22 = document.createElement("td")
+            td22. innerText = account.lastName
+            tr2.appendChild(td22)
+        
+            const tr3 = document.createElement("tr")
+            tbody.appendChild(tr3)
+        
+            const td31 = document.createElement("td")
+            td31.innerText = "Phone number"
+            tr3.appendChild(td31)
+            
+            const td32 = document.createElement("td")
+            td32. innerText = account.phoneNumber
+            tr3.appendChild(td32)
+        
+            const tr4 = document.createElement("tr")
+            tbody.appendChild(tr4)
+        
+            const td41 = document.createElement("td")
+            td41.innerText = "Email"
+            tr4.appendChild(td41)
+            
+            const td42 = document.createElement("td")
+            td42. innerText = account.email
+            tr4.appendChild(td42)
+        })
+        
+      }).catch (function(error){
+        errorDiv.innerHTML = ""
+        const p = document.createElement("p")
+        p.innerText=error
+        errorDiv.appendChild(p)
+      })
+      
+  }
+
+  async function signupVolunteer(volunteer){
+    const bodyDiv = document.querySelector('.container#entry-page')
+    const errorDiv = document.createElement("div")
+    bodyDiv.appendChild(errorDiv)
+      const response = await fetch("http://localhost:3000/api/entry/volunteers-accounts",{
+      method: "POST",
+      headers: {"Content-Type": "application/json",
+                },
+      body: JSON.stringify(
+        { firstName: volunteer.firstName,
+          lastName: volunteer.lastName,
+          mobileNumber: volunteer.mobileNumber,
+          email: volunteer.email,
+          password: volunteer.password,
+          passwordRepeat: volunteer.passwordRepeat
+        })
+    }).then (function(response){
+      return response.json()
+    
+      .then(function(result){
+        showPage("/entry/login")
+
+      })
+      
+    }).catch (function(error){
+      errorDiv.innerHTML = ""
+      const p = document.createElement("p")
+      p.innerText=error
+      errorDiv.appendChild(p)
+    })
+  }
+
+async function  signupOrganization(org){
+  const bodyDiv = document.querySelector('.container#entry-page')
+  const errorDiv = document.createElement("div")
+  bodyDiv.appendChild(errorDiv)
+  const response = await fetch("http://localhost:3000/api/entry/organizers-accounts",{
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+              },
+    body: JSON.stringify(
+      { organisationName: org.organisationName,
+        mobileNumber: org.mobileNumber,
+        email: org.email,
+        password: org.password,
+        repeatPassword: org.passwordRepeat,
+        aboutOrganisation:org.aboutOrganisation
+      })
+  }).then (function(response){
+    return response.json()
+  
+    .then(function(result){
+      showPage("/entry/login")
+
+    })
+    
+  }).catch (function(error){
+    errorDiv.innerHTML = ""
+      const p = document.createElement("p")
+      p.innerText=error
+      errorDiv.appendChild(p)
+  })
+}
+async function loadLogoutPage(){
+  const bodyDiv = document.querySelector('.container#entry-page')
+  bodyDiv.innerHTML=""
+
+  const title = document.createElement("h3")
+  title.innerText = "Logout"
+  bodyDiv.appendChild(title)
+  const p = document.createElement("p")
+  p.innerText = "Are you sure you want to logout"
+  bodyDiv.appendChild(p)
+
+  const noAnchor = document.createElement("a")
+  noAnchor.innerText = "No, go to home page!"
+  noAnchor.setAttribute("href", "/")
+  bodyDiv.appendChild(noAnchor)
+  handleAnchorOnClick(noAnchor,"/")
+
+  const yesAnchor = document.createElement("a")
+  yesAnchor.innerText = "Yes,Logout"
+  yesAnchor.setAttribute("href", "/")
+  bodyDiv.appendChild(yesAnchor)
+  
+    yesAnchor.addEventListener('click', function(e){
+    e.preventDefault()
+    window.localStorage.removeItem("token")
+    hideCurrentPage()
+    showPage("/")
+
+    })
+
+}
+async function loadLoginPage(){
+
+  const bodyDiv = document.querySelector('.container#entry-page')
+  bodyDiv.innerHTML=""
+
+  const title = document.createElement("h3")
+  title.innerText = "Login"
+  bodyDiv.appendChild(title)
+
+  const emailInputDiv = creatInlineInputDiv("email","email","email","Email")
+  bodyDiv.appendChild(emailInputDiv)
+  const passwordInputDiv = creatInlineInputDiv("password","password","password","Password")
+  bodyDiv.appendChild(passwordInputDiv)
+
+  const button = document.createElement("button")
+  button.innerText = "Submit"
+  bodyDiv.appendChild(button)
+  button.addEventListener('click', function(e){
+      e.preventDefault()
+      login(emailInputDiv.firstChild.value,passwordInputDiv.firstChild.value)
+        
+  })
+}
+
+async function login(email,password){
+  const bodyDiv = document.querySelector('.container#entry-page')
+  const errorDiv = document.createElement("div")
+  bodyDiv.appendChild(errorDiv)
+  const response = await fetch("http://localhost:3000/api/entry",{
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+              },
+    body: JSON.stringify(
+      { grant_type: "password",
+        username: email,
+        password
+      })
+  }).then (function(response){
+    return response.json()
+  
+    .then(function(result){
+      window.localStorage.setItem("token",JSON.stringify(result.access_token))
+      showPage("/")
+    })
+    
+  }).catch (function(error){
+console.log(error)
+    errorDiv.innerHTML = ""
+      const p = document.createElement("p")
+      p.innerText=error
+      errorDiv.appendChild(p)
+  })
+}
+
