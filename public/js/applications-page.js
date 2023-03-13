@@ -18,13 +18,6 @@ async function loadApplicationsPage() {
         title.innerText = " Applications"
         bodyDiv.appendChild(title)
 
-        /*if (isOrganizationLoggedin()){
-          const createEventAnchor = document.createElement('a')
-          createEventAnchor.innerText = "Create new event"
-          handleAnchorOnClick(createEventAnchor,"/events/create")
-          bodyDiv.appendChild(createEventAnchor)
-        }*/
-
         const table = document.createElement('table')
         bodyDiv.appendChild(table)
 

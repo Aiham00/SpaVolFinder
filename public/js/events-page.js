@@ -215,7 +215,12 @@ function loadCreateEventPage(){
         description: textareaDescription.value,
         link: inlineDivLink.firstChild.value
       }
+
+    if (event.title.length == 0){
+      document.querySelector('.helper-text-title').innerHTML = "required"
+    }else{
       createEvent(event)
+    }
       
     })
 }

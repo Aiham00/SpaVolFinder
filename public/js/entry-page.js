@@ -121,9 +121,53 @@ function loadSignupVolunteerPage(){
           passwordRepeat: inlineDivPasswordRepeat.firstChild.value
           
         }
-                    
-        signupVolunteer(volunteer)
+        const firstNameError = document.querySelector('.helper-text-first-name')
+        const lastNameError = document.querySelector('.helper-text-last-name')
+        const emailError = document.querySelector('.helper-text-email')
+        const mobileError = document.querySelector('.helper-text-mobile_number')
+        const passwordError = document.querySelector('.helper-text-password')
+        const repeatPasswordError = document.querySelector('.helper-text-password-repeat')
+           
+        firstNameError.innerHTML = " "
+        lastNameError.innerHTML = " "
+        emailError.innerHTML = " "
+        mobileError.innerHTML = " "
+        passwordError.innerHTML = " "
+        repeatPasswordError.innerHTML = " "
         
+        const isValidForm = function(){
+          let isvalid = true
+  
+          if(volunteer.firstName.length == 0){
+            firstNameError.innerHTML = "required"
+            isvalid = false
+          }
+          
+          if(volunteer.lastName.length == 0){
+            lastNameError.innerHTML = "required"
+                      isvalid = false
+          }
+          if(!volunteer.email.includes('@')){
+            emailError.innerHTML = "Enter a valid email"
+                      isvalid = false
+          }
+          if(volunteer.mobileNumber.length < 10){
+            mobileError.innerHTML = "Not a valid moblie number"
+                      isvalid = false
+          }
+          if(volunteer.password.length < 8){
+            passwordError.innerHTML = "Too short password, try again"
+                      isvalid = false
+          }
+          if (volunteer.password != volunteer.passwordRepeat){
+            repeatPasswordError.innerHTML = "Does not match"
+                      isvalid = false
+          }
+          return isvalid
+  
+        }
+        if(isValidForm())
+        signupVolunteer(volunteer)          
         
       })
 

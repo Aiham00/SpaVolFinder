@@ -33,4 +33,5 @@ p {
 
 .page.current-page{
 	display: block;
+    color: rgb(47, 37, 179);
 }
