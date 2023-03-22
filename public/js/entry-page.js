@@ -489,7 +489,23 @@ async function loadLoginPage(){
   bodyDiv.appendChild(button)
   button.addEventListener('click', function(e){
       e.preventDefault()
-      login(emailInputDiv.firstChild.value,passwordInputDiv.firstChild.value)
+      const email = emailInputDiv.firstChild.value
+      const password = passwordInputDiv.firstChild.value
+
+      const emailError = document.querySelector('.helper-text-email')
+      const passwordError = document.querySelector('.helper-text-password')
+
+      emailError .innerHTML =""
+      passwordError.innerHTML = ""
+
+    if(!email.includes('@')){
+      emailError.innerHTML = "Not Valid Email"
+    }
+    if(password.length < 6){
+      passwordError.innerHTML = "Not Valid Password"
+    }else{
+      login(email,password)
+    }
         
   })
 }
