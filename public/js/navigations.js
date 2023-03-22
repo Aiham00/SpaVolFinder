@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 window.addEventListener('popstate', function(){
-    
+
     hideCurrentPage()
     showPage(location.pathname)
     
@@ -34,7 +34,6 @@ function hideCurrentPage(){
 }
 
 function showPage(url){
-
     updateBarLogStatus()
     let nextPageId
     
@@ -103,7 +102,7 @@ function showPage(url){
             }else if(url.startsWith("/applications/create/")){
                 const [empty, applications, comand, id] = url.split("/")
                 nextPageId = 'applications-page'
-                loadEventApplicationsPage(id)
+                loadCreateApplicationPage(id)
             }else if(url.startsWith("/applications/")){
                 const [empty, applications, id] = url.split("/")
                 nextPageId = 'applications-page'
@@ -135,7 +134,7 @@ function updateBarLogStatus(){
 
     const logOutbutton = document.querySelector("a#logout-page ")
     const entrybutton = document.querySelector("a#entry-page ")
-    if (JSON.parse(window.localStorage.getItem("token"))){
+    if (window.localStorage.getItem("token")){
         logOutbutton.classList.remove("vol-menu-hidden")
         entrybutton.classList.add("vol-menu-hidden")
     }else{

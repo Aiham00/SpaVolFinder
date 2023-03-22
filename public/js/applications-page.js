@@ -286,7 +286,6 @@ async function loadEventApplicationsPage(eventId) {
   .then (function(response){
     return response.json()
       .then(function(application){
-        console.log(application)
         const bodyDiv = document.querySelector('.container#entry-page')
         bodyDiv.innerHTML = ""
 

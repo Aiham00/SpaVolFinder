@@ -230,7 +230,46 @@ function loadSignupOrganizationPage(){
         passwordRepeat: inlineDivPasswordRepeat.firstChild.value,
         aboutOrganisation:textareaAbout.value
         
+      }  
+      const organisationNameError = document.querySelector('.helper-text-organisation_name')
+      const emailError = document.querySelector('.helper-text-email')
+      const mobileError = document.querySelector('.helper-text-mobile_number')
+      const passwordError = document.querySelector('.helper-text-password')
+      const repeatPasswordError = document.querySelector('.helper-text-password-repeat')
+
+      organisationNameError.innerHTML = ""
+      emailError .innerHTML =""
+      mobileError.innerHTML = ""
+      passwordError.innerHTML = ""
+      repeatPasswordError.innerHTML = ""
+
+      const isValidOrgForm = function(){
+        let isvalid = true
+
+        if(org.organisationName.length == 0){
+          organisationNameError.innerHTML = "required"
+          isvalid = false
+        }
+        if(!org.email.includes('@')){
+          emailError.innerHTML = "Enter a valid email"
+                    isvalid = false
+        }
+        if(org.mobileNumber.length < 10){
+          mobileError.innerHTML = "Not a valid moblie number"
+                    isvalid = false
+        }
+        if(org.password.length < 8){
+          passwordError.innerHTML = "Too short password, try again"
+                    isvalid = false
+        }
+        if (org.password != volunteer.passwordRepeat){
+          repeatPasswordError.innerHTML = "Does not match"
+                    isvalid = false
+        }
+        return isvalid 
+
       }
+      if(isValidOrgForm())
       signupOrganization(org)
       
     })
@@ -383,20 +422,22 @@ async function  signupOrganization(org){
         repeatPassword: org.passwordRepeat,
         aboutOrganisation:org.aboutOrganisation
       })
-  }).then (function(response){
+  }).then (async function(response){
     return response.json()
   
     .then(function(result){
+      
       showPage("/entry/login")
 
+    }).catch (function(error){
+      errorDiv.innerHTML = ""
+        const p = document.createElement("p")
+        p.innerText=error
+        errorDiv.appendChild(p)
     })
     
-  }).catch (function(error){
-    errorDiv.innerHTML = ""
-      const p = document.createElement("p")
-      p.innerText=error
-      errorDiv.appendChild(p)
   })
+  
 }
 async function loadLogoutPage(){
   const bodyDiv = document.querySelector('.container#entry-page')
