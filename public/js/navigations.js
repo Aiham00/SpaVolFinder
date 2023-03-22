@@ -79,6 +79,7 @@ function showPage(url){
             break
             
         default:
+
             if(url.startsWith("/events/create/")){
                 const [empty, events, creat, id] = url.split("/")
                 nextPageId = 'events-page'
@@ -99,15 +100,19 @@ function showPage(url){
                 nextPageId = 'events-page'
                 loadEventPage(id)
 
+            }else if(url.startsWith("/applications/create/")){
+                const [empty, applications, comand, id] = url.split("/")
+                nextPageId = 'applications-page'
+                loadEventApplicationsPage(id)
             }else if(url.startsWith("/applications/")){
                 const [empty, applications, id] = url.split("/")
                 nextPageId = 'applications-page'
                 loadEventApplicationsPage(id)
-
+                
             }else if(url.startsWith("/entry/")){
                 const [empty, entry, id] = url.split("/")
                 nextPageId = 'entry-page'
-                loadAcountInfoPage(id)
+                loadAccountInfoPage(id)
             }else{
                 nextPageId = 'not-found-page'
             }
@@ -153,7 +158,7 @@ function handleAnchorOnClick(anchor,url){
  function isOrganizationLoggedin(){
     const token = JSON.parse(window.localStorage.getItem("token"))
     if(token){
-        return decode(token).includes("isOrg")
+        return JSON.parse(decode(token)).isOrg
     }else{
         return false
     }
@@ -161,11 +166,20 @@ function handleAnchorOnClick(anchor,url){
  function isVolunteerLoggedin(){
     const token = JSON.parse(window.localStorage.getItem("token"))
     if (token){
-        return decode(token).includes("isVolunteer")
+        return  JSON.parse(decode(token)).isVolunteer
     }else{
         return false
     }
  }
+
+function getLoggedinAccountId(){
+    const token = JSON.parse(window.localStorage.getItem("token"))
+    if (token){
+        return  JSON.parse(decode(token)).id
+    }else{
+        return false
+    } 
+}
 const decode = token =>
 decodeURIComponent(atob(token.split('.')[1].replace('-', '+').replace('_', '/')).split('').map(c =>
 `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`).join(''));

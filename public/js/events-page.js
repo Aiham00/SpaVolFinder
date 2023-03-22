@@ -120,7 +120,7 @@ async function loadEventPage(id) {
             }else{
               const applyAnchor = document.createElement('a')
               applyAnchor.innerText = "Applay now"
-              handleAnchorOnClick(applyAnchor,"/events/create/"+id)
+              handleAnchorOnClick(applyAnchor,"/applications/create/"+id)
               td.appendChild(applyAnchor)
             }
           }

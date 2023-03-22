@@ -120,3 +120,242 @@ async function loadApplicationsPage() {
     })
   }   
 }
+
+async function loadCreateApplicationPage(id){
+
+  const token = JSON.parse(window.localStorage.getItem("token"))
+  if (!token){
+    showPage("/entry/login")
+  }else{
+    const bodyDiv = document.querySelector('.container#entry-page')
+    bodyDiv.innerHTML = ""
+    const errorDiv = document.createElement("div")
+    const accountId = getLoggedinAccountId()
+    const response = await fetch('http://localhost:3000/api/entry/'+accountId)
+    .then (function(response){
+      return response.json()
+        .then(function(account){
+          console.log(account)
+            const div = document.createElement("div")
+            bodyDiv.appendChild(div)
+        
+            const table = document.createElement("table")
+            div.appendChild(table)
+
+            const tbody = document.createElement("tbody")
+            table.appendChild(tbody)
+        
+            const tr1 = document.createElement("tr")
+            tbody.appendChild(tr1)
+
+
+              const td11 = document.createElement("td")
+              td11.innerText = "First name"
+              tr1.appendChild(td11)
+              
+              const td12 = document.createElement("td")
+              td12. innerText = account.firstName
+              tr1.appendChild(td12)
+          
+              const tr2 = document.createElement("tr")
+              tbody.appendChild(tr2)
+          
+              const td21 = document.createElement("td")
+              td21.innerText = "Last name"
+              tr2.appendChild(td21)
+              
+              const td22 = document.createElement("td")
+              td22. innerText = account.lastName
+              tr2.appendChild(td22)
+            
+            const tr3 = document.createElement("tr")
+            tbody.appendChild(tr3)
+        
+            const td31 = document.createElement("td")
+            td31.innerText = "Phone number"
+            tr3.appendChild(td31)
+            
+            const td32 = document.createElement("td")
+            td32. innerText = account.phoneNumber
+            tr3.appendChild(td32)
+        
+            const tr4 = document.createElement("tr")
+            tbody.appendChild(tr4)
+        
+            const td41 = document.createElement("td")
+            td41.innerText = "Email"
+            tr4.appendChild(td41)
+            
+            const td42 = document.createElement("td")
+            td42. innerText = account.email
+            tr4.appendChild(td42)
+
+            const divNote= document.createElement("div")
+            divNote.classList.add("input-field")
+            divNote.classList.add("col")
+
+            const textareaNote = document.createElement("textarea")
+            textareaNote.id = "note"
+            textareaNote.placeholder = `
+            Here you can type you availability during the whole event's time, 
+            your suggsetions or any thoughts about the event.              
+            `
+            textareaNote.classList.add("materialize-textarea")
+            textareaNote.name = "note"
+            divNote.appendChild(textareaNote)
+          
+            const label = document.createElement("label")
+            label.setAttribute("for","note")
+            label.innerText = "Note. (OPTIONAL)"
+            divNote.appendChild(label)
+            bodyDiv.appendChild(divNote)
+          
+            const button = document.createElement("button")
+            button.innerText = "Apply"
+            bodyDiv.appendChild(button)
+            button.addEventListener('click', function(e){
+                e.preventDefault()
+          
+                const application = {
+                  accountId: account.accountId,
+                  eventId: id,
+                  note: textareaNote.value,
+                }
+
+                createApplication(application)                
+              })
+            
+
+        })
+        
+      }).catch (function(error){
+        errorDiv.innerHTML = ""
+        const p = document.createElement("p")
+        p.innerText=error
+        errorDiv.appendChild(p)
+      })
+  }
+}
+
+async function createApplication(application){
+  const token = JSON.parse(window.localStorage.getItem("token"))
+  const bodyDiv = document.querySelector('.container#entry-page')
+  const errorDiv = document.createElement("div")
+  bodyDiv.appendChild(errorDiv)
+    const response = await fetch("http://localhost:3000/api/applications/",{
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+              "Authorization": "Bearer "+token
+              },
+    body: JSON.stringify(
+      {                 
+        accountId: application.accountId,
+        eventId: application.eventId,
+        note: application.note
+      
+      })
+    
+  }).then (async function(response){
+    return response.json()
+  
+    .then(function(result){
+      console.log(result)
+      showPage("/applications/"+application.eventId)
+
+    })
+    
+  }).catch (function(error){
+    errorDiv.innerHTML = ""
+    const p = document.createElement("p")
+    p.innerText=error
+    errorDiv.appendChild(p)
+  })
+  
+}              
+
+async function loadEventApplicationsPage(eventId) {
+  const token = JSON.parse(window.localStorage.getItem("token"))
+  if (!token){
+    showPage("/entry/login")
+  }else{
+  const response = await fetch('http://localhost:3000/api/applications/'+eventId,{
+    headers: {"Content-Type": "application/json",
+              "Authorization": "Bearer "+token
+              }
+  })
+  .then (function(response){
+    return response.json()
+      .then(function(application){
+        console.log(application)
+        const bodyDiv = document.querySelector('.container#entry-page')
+        bodyDiv.innerHTML = ""
+
+        const cardDiv = document.createElement("div")
+        cardDiv.classList.add("card")
+        bodyDiv.appendChild(cardDiv)
+
+        const cardContent = document.createElement("div")
+        cardContent.classList.add("card-content")
+        cardDiv.appendChild(cardContent)
+
+        const table = document.createElement('table')
+        cardContent.appendChild(table)
+
+        const tr = document.createElement('tr')
+        table.appendChild(tr)
+
+        const th = document.createElement('th')
+        tr.appendChild(th)
+
+        const AccountAnchor = document.createElement('a')
+        AccountAnchor.innerText = application.firstName + application.lastName
+        const url = "/entry/"+application.accountId
+        handleAnchorOnClick(AccountAnchor,url)
+        th.appendChild(AccountAnchor)
+
+        const td = document.createElement('td')
+        tr.appendChild(td)
+        
+          const spanMore  = document.createElement("span")
+          spanMore.classList.add("card-title")
+          spanMore.classList.add("activator")
+          spanMore.classList.add("grey-text")
+          spanMore.classList.add("text-darken-4")
+          td.appendChild(spanMore)
+          
+          const iMore = document.createElement("i")
+          iMore.classList.add("material-icons")
+          iMore.classList.add("right")
+          iMore.innerText = "more_vert"
+          spanMore.appendChild(iMore)
+
+          const cardReveal = document.createElement("div")
+          cardReveal.classList.add("card-content")
+          cardReveal.classList.add("card-title")
+          cardReveal.classList.add("grey-text")
+          cardReveal.classList.add("text-darken-4")
+          cardDiv.appendChild(cardReveal)
+
+          const iLess = document.createElement("i")
+          iLess.classList.add("material-icons")
+          iLess.classList.add("right")
+          iLess.innerText = "close"
+          cardReveal.appendChild(iLess)
+
+          const p = document.createElement("p")
+          p.innerText = application.note
+          cardReveal.appendChild(p)
+          
+
+
+
+      })
+      
+    }).catch (function(error){
+      const bodyDiv = document.querySelector('.container#entry-page')
+      const p = document.createElement("p")
+      p.innerText=error
+      bodyDiv.appendChild(p)
+    })
+  }   
+}

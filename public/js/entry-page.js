@@ -231,14 +231,13 @@ function loadSignupOrganizationPage(){
         aboutOrganisation:textareaAbout.value
         
       }
-                  
       signupOrganization(org)
       
     })
 
 }
 
-async function loadVolunteerInfoPage(id) {
+async function loadAccountInfoPage(id) {
     const bodyDiv = document.querySelector('.container#entry-page')
     bodyDiv.innerHTML=""
     const errorDiv = document.createElement("div")
@@ -247,41 +246,50 @@ async function loadVolunteerInfoPage(id) {
     .then (function(response){
       return response.json()
         .then(function(account){
-            const div = document-createElement(" div")
+            const div = document.createElement("div")
             bodyDiv.appendChild(div)
         
-            const span = document.createElement("span")
-            span.innerText = "Account Information"
-            div.appendChild(span)
+            const h3 = document.createElement("h3")
+            h3.innerText = "Account Information"
+            div.appendChild(h3)
         
             const table = document.createElement("table")
             div.appendChild(table)
-        
+
             const tbody = document.createElement("tbody")
             table.appendChild(tbody)
         
             const tr1 = document.createElement("tr")
             tbody.appendChild(tr1)
-        
-            const td11 = document.createElement("td")
-            td11.innerText = "First name"
-            tr1.appendChild(td11)
-            
-            const td12 = document.createElement("td")
-            td12. innerText = account.firstName
-            tr1.appendChild(td12)
-        
-            const tr2 = document.createElement("tr")
-            tbody.appendChild(tr2)
-        
-            const td21 = document.createElement("td")
-            td21.innerText = "Last name"
-            tr2.appendChild(td21)
-            
-            const td22 = document.createElement("td")
-            td22. innerText = account.lastName
-            tr2.appendChild(td22)
-        
+
+            if(account.name){
+              const td11 = document.createElement("td")
+              td11.innerText = "Name"
+              tr1.appendChild(td11)
+              
+              const td12 = document.createElement("td")
+              td12. innerText = account.name
+              tr1.appendChild(td12) 
+            }else{
+              const td11 = document.createElement("td")
+              td11.innerText = "First name"
+              tr1.appendChild(td11)
+              
+              const td12 = document.createElement("td")
+              td12. innerText = account.firstName
+              tr1.appendChild(td12)
+          
+              const tr2 = document.createElement("tr")
+              tbody.appendChild(tr2)
+          
+              const td21 = document.createElement("td")
+              td21.innerText = "Last name"
+              tr2.appendChild(td21)
+              
+              const td22 = document.createElement("td")
+              td22. innerText = account.lastName
+              tr2.appendChild(td22)
+            }
             const tr3 = document.createElement("tr")
             tbody.appendChild(tr3)
         
@@ -303,6 +311,19 @@ async function loadVolunteerInfoPage(id) {
             const td42 = document.createElement("td")
             td42. innerText = account.email
             tr4.appendChild(td42)
+
+            if(account.about){
+              const tr5 = document.createElement("tr")
+              tbody.appendChild(tr5)
+          
+              const td51 = document.createElement("td")
+              td51.innerText = "About"
+              tr5.appendChild(td51)
+              
+              const td52 = document.createElement("td")
+              td52. innerText = account.about
+              tr5.appendChild(td52)
+            }
         })
         
       }).catch (function(error){
@@ -454,7 +475,6 @@ async function login(email,password){
     })
     
   }).catch (function(error){
-console.log(error)
     errorDiv.innerHTML = ""
       const p = document.createElement("p")
       p.innerText=error
