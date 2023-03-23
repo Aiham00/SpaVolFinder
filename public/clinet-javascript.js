@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const mainUl = document.querySelector("#" + mainListId)
     const menuLink = document.querySelector("#" + menuLinkId)
     const menuSymbole = document.querySelector("#" + menuSymbolId)
+
     if (logo.classList.contains(logoPositionClass)) {
         logo.classList.remove(logoPositionClass)
     }
+    
     logo.classList.add(newLogoPositionClass)
     mainUl.classList.add(largClass)
     menuLink.classList.add(menuLinkClass)
