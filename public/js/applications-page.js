@@ -278,7 +278,7 @@ async function createApplication(application) {
 					throw result
 
 				} else {
-					showPage("/applications/" + application.eventId)
+					showPage("/events/" + application.eventId)
 				}
 			})
 	}).catch(function (error) {
